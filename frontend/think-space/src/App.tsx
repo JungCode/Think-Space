@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import axios from 'axios';
+import Paragraph from './components/Paragraph';
 
 interface DataType {
   message: string; // Thay đổi theo cấu trúc thực tế của dữ liệu
@@ -26,7 +27,7 @@ function App() {
         <a href="https://react.dev" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
-      <p>{data?.message}</p>
+      <Paragraph>{data?.message}</Paragraph>
       </div>
       <h1>Vite + React</h1>
       <div className="card">
