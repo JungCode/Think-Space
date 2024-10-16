@@ -14,6 +14,6 @@ describe('Test index route', () => {
     const response = await request(app).get('/'); // Gửi yêu cầu GET tới '/'
 		console.log(response);
     expect(response.status).toBe(200); // Kiểm tra mã trạng thái HTTP
-    expect(response.body).toEqual({ message: 'This text comes from Back-end!' }); // Kiểm tra nội dung phản hồi
+    expect(response.body).toEqual({ message: 'Hello this text comes from Back-end!' }); // Kiểm tra nội dung phản hồi
   });
 });
