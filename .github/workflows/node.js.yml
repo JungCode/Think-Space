@@ -48,6 +48,17 @@ jobs:
       run: npm test
       working-directory: frontend/think-space
 
+    - name: Deploy to Vercel
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      run: |
+        npm install -g vercel
+        vercel --prod --confirm
+
+
+
   be-build:  # Sửa tên job để không có khoảng trắng
 
     runs-on: ubuntu-latest
