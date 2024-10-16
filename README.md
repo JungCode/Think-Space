@@ -7,5 +7,3 @@ This project is using ExpressJS and Vite, ReactJS
 ```cd frontend/think-space```->
 ```npm run dev```
 
-test
-
