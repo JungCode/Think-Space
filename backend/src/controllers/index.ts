@@ -1,5 +1,14 @@
 import { Request, Response } from "express";
-
-export const getIndex = (req: Request, res: Response) => {
-  res.json({message:'Hello this text comes from Back-end!'});
+import * as Model from "../models/index"
+export const getIndex = async (req: Request, res: Response) => {
+  try {
+    const users = await Model.getAllUsers();
+    res.status(200).send(users);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).send({ message: error.message });
+    } else {
+      throw new Error('Error fetching users: An unknown error occurred');
+    }
+  }
 }
