@@ -6,8 +6,10 @@ import admin from 'firebase-admin';
 import serviceAccountRaw from '../firebase-config.json' assert { type: 'json' };
 import { ServiceAccount } from 'firebase-admin';
 dotenv.config();
-const serviceAccount = serviceAccountRaw as ServiceAccount;
-
+const serviceAccount = process.env.FIREBASE_CONFIG 
+  ? JSON.parse(process.env.FIREBASE_CONFIG) as ServiceAccount 
+  : serviceAccountRaw as ServiceAccount;
+  
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
