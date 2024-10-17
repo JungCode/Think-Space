@@ -108,6 +108,8 @@ jobs:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}  # Lấy token Railway từ GitHub Secrets
       run: |
         npx railway up --environment production --service Think-Space-Back-End
+      working-directory: backend
+      
       
       
     
