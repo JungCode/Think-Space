@@ -98,4 +98,13 @@ jobs:
     - name: Run tests
       run: npm test
       working-directory: backend
+
+
+    - name: Deploy to Railway
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}  # Lấy token Railway từ GitHub Secrets
+      run: |
+        npx railway up --env production
+      
+      
     
