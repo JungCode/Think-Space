@@ -12,7 +12,7 @@ function App() {
   const [count, setCount] = useState(0);
   const[data,setData] = useState<DataType>();
   useEffect(() => {
-    axios.get<DataType>('http://localhost:3000/')
+    axios.get<DataType>('https://think-space-back-end-production.up.railway.app/')
       .then(response => {
         setData(response.data);
       })
