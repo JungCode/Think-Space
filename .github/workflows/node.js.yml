@@ -90,7 +90,7 @@ jobs:
       working-directory: backend  # Đặt đúng thư mục làm việc
 
     - name: Create Firebase config
-      run: echo "${{ secrets.FIREBASE_CONFIG }}" > firebase-config.json
+      run: echo '${{ secrets.FIREBASE_CONFIG }}' > firebase-config.json
       working-directory: backend
 
     # Build ứng dụng từ đúng thư mục
