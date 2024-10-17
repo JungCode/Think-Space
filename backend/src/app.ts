@@ -3,13 +3,18 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import indexRoutes from './routes/index';
 import admin from 'firebase-admin';
-import serviceAccountRaw from '../firebase-config.json' assert { type: 'json' };
 import { ServiceAccount } from 'firebase-admin';
 dotenv.config();
-const serviceAccount = process.env.FIREBASE_CONFIG 
-  ? JSON.parse(process.env.FIREBASE_CONFIG) as ServiceAccount 
-  : serviceAccountRaw as ServiceAccount;
-  
+
+let serviceAccount: ServiceAccount;
+if (process.env.FIREBASE_CONFIG) {
+  serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG) as ServiceAccount;
+} else {
+  // Chỉ import tệp khi biến môi trường không tồn tại
+  const serviceAccountRaw = await import('../firebase-config.json', { assert: { type: 'json' } });
+  serviceAccount = serviceAccountRaw as ServiceAccount;
+}
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
