@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import indexRoutes from './routes/index';
 import admin from 'firebase-admin';
-import serviceAccountRaw from './firebase-config.json' assert { type: 'json' };
+import serviceAccountRaw from '../firebase-config.json' assert { type: 'json' };
 import { ServiceAccount } from 'firebase-admin';
 dotenv.config();
 const serviceAccount = serviceAccountRaw as ServiceAccount;

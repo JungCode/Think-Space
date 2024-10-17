@@ -89,6 +89,10 @@ jobs:
       run: npm ci
       working-directory: backend  # Đặt đúng thư mục làm việc
 
+    - name: Create Firebase config
+      run: echo "${{ secrets.FIREBASE_CONFIG }}" > firebase-config.json
+      working-directory: backend
+
     # Build ứng dụng từ đúng thư mục
     - name: Build application
       run: npm run build --if-present
