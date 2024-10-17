@@ -1,4 +1,3 @@
-
 name: Node.js CI
 
 on:
@@ -8,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  fe build:
+  fe-build:  # Sửa tên job để không có khoảng trắng
 
     runs-on: ubuntu-latest
     strategy:
@@ -33,23 +32,33 @@ jobs:
         key: ${{ runner.os }}-node-${{ matrix.node-version }}-frontend-think-space
         restore-keys: |
           ${{ runner.os }}-node-${{ matrix.node-version }}-
+          
     # Cài dependencies từ đúng thư mục
     - name: Install dependencies
       run: npm ci
       working-directory: frontend/think-space  # Đặt đúng thư mục làm việc
-
-    # Build ứng dụng từ đúng thư mục
-    - name: Build application
-      run: npm run build --if-present
-      working-directory: frontend/think-space
 
     # Chạy tests từ đúng thư mục
     - name: Run tests
       run: npm test
       working-directory: frontend/think-space
 
+    - name: Install Vercel CLI
+      run: npm install --global vercel@latest
 
-  be build:
+    - name: Pull Vercel Environment Information
+      run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      working-directory: frontend/think-space
+    
+    - name: Build Project Artifacts
+      run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      working-directory: frontend/think-space
+    
+    - name: Deploy Project Artifacts to Vercel
+      run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+      working-directory: frontend/think-space
+
+  be-build:  # Sửa tên job để không có khoảng trắng
 
     runs-on: ubuntu-latest
     strategy:
@@ -74,6 +83,7 @@ jobs:
         key: ${{ runner.os }}-node-${{ matrix.node-version }}-backend-think-space
         restore-keys: |
           ${{ runner.os }}-node-${{ matrix.node-version }}-
+          
     # Cài dependencies từ đúng thư mục
     - name: Install dependencies
       run: npm ci
@@ -88,3 +98,18 @@ jobs:
     - name: Run tests
       run: npm test
       working-directory: backend
+
+    - name: Install railway
+      run: npm install -g @railway/cli
+      working-directory: backend
+
+    - name: Deploy to Railway
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}  # Lấy token Railway từ GitHub Secrets
+      run: |
+        npx railway up --environment production --service Think-Space-Back-End
+      working-directory: backend
+      
+      
+      
+    
