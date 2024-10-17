@@ -108,7 +108,7 @@ jobs:
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}  # Lấy token Railway từ GitHub Secrets
       run: |
-        npx railway up --env production
+        npx railway up --environment production
       
       
     
