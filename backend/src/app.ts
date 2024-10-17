@@ -25,3 +25,4 @@ app.listen(port, () => {
 });
 
 export {firestoreDb}
+export default app;
