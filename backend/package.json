@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
+    "build": "tsc",
     "start": "ts-node src/app.ts",
     "test": "vitest",
     "test:ui": "vitest --ui"
@@ -28,4 +29,5 @@
     "typescript": "^5.6.3",
     "vitest": "^2.1.3"
   }
+  
 }
