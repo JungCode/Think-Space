@@ -103,7 +103,6 @@ jobs:
       run: npm install -g @railway/cli
       working-directory: backend
 
-
     - name: Deploy to Railway
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}  # Lấy token Railway từ GitHub Secrets
