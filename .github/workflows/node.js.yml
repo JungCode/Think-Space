@@ -45,8 +45,7 @@ jobs:
 
     # Cái biến môi trường của token clerk
     - name: dotenv for clerk
-      env:
-        VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
+      run: echo "VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}" >> .env
       working-directory: frontend/think-space
 
     # Tải Vercel
