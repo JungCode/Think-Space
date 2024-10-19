@@ -43,17 +43,27 @@ jobs:
       run: npm test
       working-directory: frontend/think-space
 
+    # Cái biến môi trường của token clerk
+    - name: dotenv for clerk
+      env:
+        VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
+      working-directory: frontend/think-space
+
+    # Tải Vercel
     - name: Install Vercel CLI
       run: npm install --global vercel@latest
 
+    # Dùng token của Vercel
     - name: Pull Vercel Environment Information
       run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
       working-directory: frontend/think-space
-    
+
+    # Build 
     - name: Build Project Artifacts
       run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       working-directory: frontend/think-space
-    
+
+    # Deploy
     - name: Deploy Project Artifacts to Vercel
       run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
       working-directory: frontend/think-space
@@ -89,6 +99,7 @@ jobs:
       run: npm ci
       working-directory: backend  # Đặt đúng thư mục làm việc
 
+    # Cái Firebase
     - name: Create Firebase config
       run: echo '${{ secrets.FIREBASE_CONFIG }}' > firebase-config.json
       working-directory: backend
@@ -102,11 +113,12 @@ jobs:
     - name: Run tests
       run: npm test
       working-directory: backend
-
+    # Tải railway
     - name: Install railway
       run: npm install -g @railway/cli
       working-directory: backend
 
+    # Deploy
     - name: Deploy to Railway
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}  # Lấy token Railway từ GitHub Secrets
