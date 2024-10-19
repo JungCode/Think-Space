@@ -17,6 +17,7 @@ function App() {
       })
       .catch(error => console.error('Error fetching data:', error.message));
   }, []);
+  console.log(data);
   return (
     <>
       <SignedOut>
