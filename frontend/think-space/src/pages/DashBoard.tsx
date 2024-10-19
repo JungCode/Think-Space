@@ -1,5 +1,4 @@
 import { UserButton, useUser } from '@clerk/clerk-react';
-import React from 'react'
 
 const DashBoard = () => {
     const {user} = useUser();
