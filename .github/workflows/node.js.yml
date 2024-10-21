@@ -7,99 +7,74 @@ on:
     branches: [ "main" ]
 
 jobs:
-  fe-build:  # Sửa tên job để không có khoảng trắng
-
+  build-and-deploy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        # Không dùng cache tích hợp ở đây
 
-    # Tạo cache thủ công
-    - name: Cache npm dependencies
+    # Bước cho frontend
+    - name: Cache npm dependencies for frontend
       uses: actions/cache@v3
       with:
-        path: frontend/think-space/node_modules  # Cache thư mục node_modules trong đúng thư mục
-        key: ${{ runner.os }}-node-${{ matrix.node-version }}-frontend-think-space
+        path: frontend/think-space/node_modules
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-frontend
         restore-keys: |
           ${{ runner.os }}-node-${{ matrix.node-version }}-
-          
-    # Cài dependencies từ đúng thư mục
-    - name: Install dependencies
-      run: npm ci
-      working-directory: frontend/think-space  # Đặt đúng thư mục làm việc
 
-    # Chạy tests từ đúng thư mục
-    - name: Run tests
+    - name: Install frontend dependencies
+      run: npm ci
+      working-directory: frontend/think-space
+
+    - name: Run frontend tests
       run: npm test
       working-directory: frontend/think-space
 
     - name: Install Vercel CLI
       run: npm install --global vercel@latest
 
-    - name: Pull Vercel Environment Information
+    - name: Pull Vercel Environment Information for frontend
       run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
       working-directory: frontend/think-space
-    
-    - name: Build Project Artifacts
+
+    - name: Build Project Artifacts for frontend
       run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       working-directory: frontend/think-space
-    
-    - name: Deploy Project Artifacts to Vercel
+
+    - name: Deploy Project Artifacts to Vercel for frontend
       run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
       working-directory: frontend/think-space
 
-  be-build:  # Sửa tên job để không có khoảng trắng
-
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        # Không dùng cache tích hợp ở đây
-
-    # Tạo cache thủ công
-    - name: Cache npm dependencies
+    # Bước cho backend
+    - name: Cache npm dependencies for backend
       uses: actions/cache@v3
       with:
-        path: backend/node_modules  # Cache thư mục node_modules trong đúng thư mục
-        key: ${{ runner.os }}-node-${{ matrix.node-version }}-backend-think-space
+        path: backend/node_modules
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-backend
         restore-keys: |
           ${{ runner.os }}-node-${{ matrix.node-version }}-
-          
-    # Cài dependencies từ đúng thư mục
-    - name: Install dependencies
+
+    - name: Install backend dependencies
       run: npm ci
-      working-directory: backend  # Đặt đúng thư mục làm việc
+      working-directory: backend
 
     - name: Create Firebase config
       run: echo '${{ secrets.FIREBASE_CONFIG }}' > firebase-config.json
       working-directory: backend
 
-    # Build ứng dụng từ đúng thư mục
-    - name: Build application
+    - name: Build backend application
       run: npm run build --if-present
       working-directory: backend
 
-    # Chạy tests từ đúng thư mục
-    - name: Run tests
+    - name: Run backend tests
       run: npm test
       working-directory: backend
 
@@ -109,11 +84,7 @@ jobs:
 
     - name: Deploy to Railway
       env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}  # Lấy token Railway từ GitHub Secrets
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       run: |
         npx railway up --environment production --service Think-Space-Back-End
       working-directory: backend
-      
-      
-      
-    
