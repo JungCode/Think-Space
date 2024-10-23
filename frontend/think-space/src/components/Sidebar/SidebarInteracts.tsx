@@ -10,11 +10,11 @@ const SidebarInteracts = () => {
   return (
     <ul
       className={`
-      flex flex-col gap-2 ml-2 mt-1 transition-colors
+      flex flex-col mt-1 transition-colors overflow-hidden
       `}
     >
       <SidebarItem
-        icon={<MagnifyingGlass size={17} />}
+        icon={<MagnifyingGlass size={17}/>}
         text="Search"
         active={false}
         alert

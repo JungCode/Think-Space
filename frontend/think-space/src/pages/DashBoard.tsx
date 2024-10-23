@@ -8,7 +8,7 @@ const DashBoard = () => {
     <div className="relative">
       <div className="flex">
         <Sidebar username={user?.username} userButton={<UserButton />} />
-        <div className="left-20">
+        <div className=" w-screen text-center">
           This is DashBoard <br />
           Dit me {user?.username}
           <br />m ten la {user?.firstName} dung ko {user?.fullName}
