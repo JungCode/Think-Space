@@ -1,6 +1,5 @@
 import {
   faAnglesLeft,
-  faChevronDown,
   faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,14 +18,10 @@ const SidebarProfile: React.FC<SidebarProps> = ({
   isExpanded,
 }) => {
   return (
-    <div className="text-black cursor-pointer flex justify-items-center items-center hover:bg-stone-200 rounded-xl relative transition duration-100">
+    <div className="text-black cursor-pointer flex justify-items-center items-center hover:bg-stone-200 rounded-xl relative transition duration-200">
       <div className=" p-2 flex items-center">
         {userButton}
         <span className="ms-3 font-light text-sx">{username}</span>
-        <FontAwesomeIcon
-          icon={faChevronDown}
-          className="text-stone-400 text-xs ml-2"
-        />
       </div>
       <div className="absolute right-2">
         {isExpanded && (
