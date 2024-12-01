@@ -1,0 +1,79 @@
+import React from "react";
+import {
+  Card, // Add CardContent if needed!
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+interface AppSidebarProps {
+  user: {
+    imageUrl: string;
+    name: string;
+  };
+}
+
+const Cards = [
+  {
+    title: "👾",
+    description: "Testing card",
+    lastUsedBy: " last used by",
+    lastHours: "2 hours ago",
+  },
+  {
+    title: "👾",
+    description: "Testing card",
+    lastUsedBy: " last used by",
+    lastHours: "2 hours ago",
+  },
+  {
+    title: "👾",
+    description: "Testing card",
+    lastUsedBy: " last used by",
+    lastHours: "2 hours ago",
+  },
+  {
+    title: "👾",
+    description: "Testing card",
+    lastUsedBy: " last used by",
+    lastHours: "2 hours ago",
+  },
+  {
+    title: "👾",
+    description: "Testing card",
+    lastUsedBy: " last used by",
+    lastHours: "2 hours ago",
+  },
+  {
+    title: "👾",
+    description: "Testing card",
+    lastUsedBy: " last used by",
+    lastHours: "2 hours ago",
+  },
+];
+
+const RecentlyVisited = ({ user }: AppSidebarProps) => {
+  return (
+    <div className="flex flex-row gap-3">
+      {Cards.map((item, index) => (
+        <Card className="w-36 h-36" key={index}>
+          <CardHeader>
+            <CardTitle>{item.title}</CardTitle>
+            <CardDescription>{item.description}</CardDescription>
+          </CardHeader>
+          <CardFooter className="gap-2 text-gray-600">
+            <Avatar className="w-5 h-5">
+              <AvatarImage src={user.imageUrl} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <span className="text-xs">{item.lastHours}</span>
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  );
+};
+
+export default RecentlyVisited;
