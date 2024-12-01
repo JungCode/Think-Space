@@ -16,8 +16,10 @@ const DashBoard = () => {
               user={{ imageUrl: user.imageUrl, name: user.fullName }}
             />
           )}
-          <main className="flex-1 p-4">
-            <SidebarTrigger />
+          <main className="relative flex-1 p-4">
+            <div className="fixed top-4 left-1/5">
+              <SidebarTrigger />
+            </div>
             <Outlet />
           </main>
         </SidebarProvider>
