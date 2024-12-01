@@ -1,13 +1,12 @@
-import React from "react";
 import {
-  Card, // Add CardContent if needed!
+  Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
+// Add CardContent if needed!
 interface AppSidebarProps {
   user: {
     imageUrl: string;
