@@ -12,9 +12,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@blocknote/core": "^0.20.0",
+    "@blocknote/mantine": "^0.20.0",
+    "@blocknote/react": "^0.20.0",
     "@clerk/clerk-react": "^5.12.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@liveblocks/client": "^2.13.1",
+    "@liveblocks/react": "^2.13.1",
+    "@liveblocks/yjs": "^2.13.1",
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-collapsible": "^1.1.1",
@@ -31,7 +37,8 @@
     "lucide-react": "^0.460.0",
     "react-router-dom": "^6.27.0",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "yjs": "^13.6.20"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",

@@ -36,6 +36,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { useEffect, useState } from "react";
+import { createANewDocument, getUserDocuments } from "@/api";
+import { useAuth } from "@clerk/clerk-react";
+import { s } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
+import { Link, useNavigate } from "react-router-dom";
 
 // Menu  main items.
 const main_items_1 = [
@@ -46,12 +51,12 @@ const main_items_1 = [
   },
   {
     title: "ThinkSpace AI",
-    url: "#",
+    url: "/chat",
     icon: Bot,
   },
   {
     title: "Home",
-    url: "#",
+    url: "/home",
     icon: Home,
   },
   {
@@ -127,8 +132,46 @@ interface AppSidebarProps {
     name: string;
   };
 }
-
+interface Document {
+  id: string;
+  title: string;
+  roomId?: string;
+}
 export function AppSidebar({ user }: AppSidebarProps) {
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const { getToken } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const token = await getToken();
+        if (!token) return;
+        const data = await getUserDocuments(token);
+        setDocuments(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchDocuments();
+  }, [getToken]);
+  const addANewDocumentHandler = async () => {
+    const token = await getToken();
+    if (!token) return;
+    // Call the createANewDocument function
+    try {
+      const docId = await createANewDocument(token);
+      navigate(`/${docId}`);
+      setDocuments((prev) => [
+        ...prev,
+        {
+          id: docId,
+          title: "New page",
+        },
+      ]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Sidebar className="m-2">
       <SidebarHeader>
@@ -156,12 +199,12 @@ export function AppSidebar({ user }: AppSidebarProps) {
               {main_items_1.map((item: MenuItem) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a className="text-gray-500" href={item.url}>
+                    <Link className="text-gray-500" to={item.url}>
                       <item.icon />
                       <span className="text-sm text-gray-600">
                         {item.title}
                       </span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -181,21 +224,31 @@ export function AppSidebar({ user }: AppSidebarProps) {
             <SidebarGroupLabel className="text-xs">
               <CollapsibleTrigger>Private</CollapsibleTrigger>
             </SidebarGroupLabel>
-            <SidebarGroupAction title="Add Project">
+            <SidebarGroupAction
+              onClick={addANewDocumentHandler}
+              title="Add Project"
+            >
               <Plus /> <span className="sr-only">Add Project</span>
             </SidebarGroupAction>
             <CollapsibleContent>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {privateItems.map((item: MenuItem) => (
-                    <SidebarMenuItem key={item.title}>
+                  {[...privateItems, ...documents].map((item) => (
+                    <SidebarMenuItem key={"id" in item ? item.id : item.title}>
                       <SidebarMenuButton asChild>
-                        <a className="text-gray-500" href={item.url}>
-                          <item.icon />
+                        <Link
+                          className="text-gray-500"
+                          to={"id" in item ? `/${item.id}` : item.url}
+                        >
+                          {"icon" in item && item.icon ? (
+                            <item.icon />
+                          ) : (
+                            <ScrollText />
+                          )}
                           <span className="text-sm text-gray-600">
                             {item.title}
                           </span>
-                        </a>
+                        </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}

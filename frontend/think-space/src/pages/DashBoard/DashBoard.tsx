@@ -5,7 +5,6 @@ import { AppSidebar } from "./app-sidebar";
 
 const DashBoard = () => {
   const { user } = useUser();
-  console.log(user);
   return (
     <div>
       <div className="flex">
