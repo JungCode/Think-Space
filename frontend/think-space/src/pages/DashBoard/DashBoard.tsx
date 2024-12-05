@@ -1,34 +1,64 @@
 import { useUser } from "@clerk/clerk-react";
 import { Outlet } from "react-router-dom";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "./app-sidebar";
+// import { AppSidebar } from "@/pages/DashBoard/app-sidebar";
+import { AppSidebar } from "./Sidebar_subComponents/app-sidebar";
+
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 
 const DashBoard = () => {
   const { user } = useUser();
+
   return (
-    <div>
-      <div className="flex">
-        {/* side bar de o day  */}
-        <SidebarProvider className="relative">
-          {user && user.imageUrl && user.fullName && (
-            <AppSidebar
-              user={{ imageUrl: user.imageUrl, name: user.fullName }}
-            />
-          )}
-          <main className="relative flex-1 p-4">
-            <div className="fixed top-4 left-1/5">
-              <SidebarTrigger />
-            </div>
+    <SidebarProvider>
+      {user && (
+        <AppSidebar
+          user={{
+            fullName: user.fullName || "",
+            emailAddress: user.primaryEmailAddress?.emailAddress || "",
+            imageUrl: user.imageUrl || "",
+          }}
+        />
+      )}
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="h-4 mr-2" />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbLink href="#">
+                    Building Your Application
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </header>
+        <div className="flex flex-col flex-1 gap-4 p-4 pt-0">
+          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
             <Outlet />
-          </main>
-        </SidebarProvider>
-        {/* <div className="w-screen text-center ">
-          <div className="w-full h-9"></div>
-          <Button>Click me</Button>
-          <Outlet />
-        </div> */}
-      </div>
-    </div>
+          </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 };
 
