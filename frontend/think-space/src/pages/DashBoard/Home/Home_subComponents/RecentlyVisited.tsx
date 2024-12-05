@@ -19,44 +19,50 @@ const Cards = [
   {
     title: "👾",
     description: "Testing card",
-    lastUsedBy: " last used by",
+    lastUsedBy: "user",
     lastHours: "2 hours ago",
   },
   {
     title: "👾",
     description: "Testing card",
-    lastUsedBy: " last used by",
+    lastUsedBy: "user",
     lastHours: "2 hours ago",
   },
   {
     title: "👾",
     description: "Testing card",
-    lastUsedBy: " last used by",
+    lastUsedBy: "user",
     lastHours: "2 hours ago",
   },
   {
     title: "👾",
     description: "Testing card",
-    lastUsedBy: " last used by",
+    lastUsedBy: "user",
     lastHours: "2 hours ago",
   },
   {
     title: "👾",
     description: "Testing card",
-    lastUsedBy: " last used by",
+    lastUsedBy: "user",
     lastHours: "2 hours ago",
   },
   {
     title: "👾",
     description: "Testing card",
-    lastUsedBy: " last used by",
+    lastUsedBy: "user",
+    lastHours: "2 hours ago",
+  },
+  {
+    title: "👾",
+    description: "Testing card",
+    lastUsedBy: "user",
     lastHours: "2 hours ago",
   },
 ];
 
 const RecentlyVisited = ({ user }: AppSidebarProps) => {
   return (
-    <div className="flex flex-row gap-3">
+    <div className="flex flex-row justify-center gap-3">
       {Cards.map((item, index) => (
         <Card className="w-36 h-36" key={index}>
           <CardHeader>

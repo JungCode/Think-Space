@@ -1,8 +1,9 @@
-
 const AIChat = () => {
   return (
-    <div>AIChat</div>
-  )
-}
+    <div>
+      <span>AI Chat</span>
+    </div>
+  );
+};
 
-export default AIChat
+export default AIChat;
