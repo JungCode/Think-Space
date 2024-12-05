@@ -9,7 +9,8 @@ import { initializeFirebaseAdmin } from "./config/firebase";
 // Load environment variables
 dotenv.config();
 
-const firestoreDb = initializeFirebaseAdmin(); // Initialize Firebase
+// Initialize Firebase
+const firestoreDb = initializeFirebaseAdmin();
 
 // Initialize Express App
 const app = express();
