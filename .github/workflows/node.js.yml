@@ -66,9 +66,19 @@ jobs:
       run: npm ci
       working-directory: backend
 
-    - name: Create Firebase config
-      run: echo '${{ secrets.FIREBASE_CONFIG }}' > firebase-config.json
-      working-directory: backend
+    - name: Create .env file for backend
+      run: |
+        echo FIREBASE_TYPE=${{ secrets.FIREBASE_TYPE }} >> backend/.env
+        echo FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }} >> backend/.env
+        echo FIREBASE_PRIVATE_KEY_ID=${{ secrets.FIREBASE_PRIVATE_KEY_ID }} >> backend/.env
+        echo FIREBASE_PRIVATE_KEY="${{ secrets.FIREBASE_PRIVATE_KEY }}" >> backend/.env
+        echo FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }} >> backend/.env
+        echo FIREBASE_CLIENT_ID=${{ secrets.FIREBASE_CLIENT_ID }} >> backend/.env
+        echo FIREBASE_AUTH_URI=${{ secrets.FIREBASE_AUTH_URI }} >> backend/.env
+        echo FIREBASE_TOKEN_URI=${{ secrets.FIREBASE_TOKEN_URI }} >> backend/.env
+        echo FIREBASE_AUTH_PROVIDER_CERT_URL=${{ secrets.FIREBASE_AUTH_PROVIDER_CERT_URL }} >> backend/.env
+        echo FIREBASE_CLIENT_CERT_URL=${{ secrets.FIREBASE_CLIENT_CERT_URL }} >> backend/.env
+      shell: bash
 
     - name: Build backend application
       run: npm run build --if-present
