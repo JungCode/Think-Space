@@ -78,7 +78,9 @@ jobs:
         echo FIREBASE_TOKEN_URI=${{ secrets.FIREBASE_TOKEN_URI }} >> backend/.env
         echo FIREBASE_AUTH_PROVIDER_CERT_URL=${{ secrets.FIREBASE_AUTH_PROVIDER_CERT_URL }} >> backend/.env
         echo FIREBASE_CLIENT_CERT_URL=${{ secrets.FIREBASE_CLIENT_CERT_URL }} >> backend/.env
+        echo LIVEBLOCKS_SECRET_KEY=${{ secrets.LIVEBLOCKS_SECRET_KEY }} >> backend/.env
       shell: bash
+
 
     - name: Build backend application
       run: npm run build --if-present
