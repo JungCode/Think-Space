@@ -1,10 +1,12 @@
 "use client";
 
 import {
+  File,
   Folder,
   Forward,
   MoreHorizontal,
   Trash2,
+  Plus,
   type LucideIcon,
 } from "lucide-react";
 
@@ -24,29 +26,58 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Link, useParams } from "react-router-dom";
 
 export function NavMisc({
   projects,
+  label,
+  addANewDocument,
+  deleteHanlder
 }: {
   projects: {
-    name: string;
-    url: string;
-    icon: LucideIcon;
+    id?: string;
+    title: string;
+    url?: string;
+    roomId?: string;
+    icon?: LucideIcon;
   }[];
+  label: string;
+  getToken: () => string | null | Promise<string | null>;
+  addANewDocument: () => void;
+  deleteHanlder: (id: string) => void;
 }) {
+  const params = useParams();
   const { isMobile } = useSidebar();
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Miscellaneous</SidebarGroupLabel>
+    <SidebarGroup>
+      <SidebarMenuItem className="list-none">
+        <SidebarMenuButton className="group-data-[collapsible=icon]:hidden">
+          <SidebarGroupLabel>{label}</SidebarGroupLabel>
+        </SidebarMenuButton>
+        <DropdownMenu>
+          {label === "Private" && (
+            <DropdownMenuTrigger onClick={addANewDocument} asChild>
+              <SidebarMenuAction showOnHover>
+                <Plus />
+                <span className="sr-only">Add</span>
+              </SidebarMenuAction>
+            </DropdownMenuTrigger>
+          )}
+        </DropdownMenu>
+      </SidebarMenuItem>
       <SidebarMenu>
         {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </a>
+          <SidebarMenuItem key={item.id ? item.id : item.title}>
+            <SidebarMenuButton
+              asChild
+              isActive={(params.id === item.id && params.id) ? true : false}
+              tooltip={item.title}
+            >
+              <Link to={item.url ? `/${item.url}` : `/${item.id}` || "#"}>
+                {item.icon ? <item.icon /> : <File />}
+                <span>{item.title}</span>
+              </Link>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -71,7 +102,9 @@ export function NavMisc({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
+                  <span onClick={() => item.id && deleteHanlder(item.id)}>
+                    Delete Project
+                  </span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

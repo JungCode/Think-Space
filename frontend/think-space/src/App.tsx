@@ -1,5 +1,3 @@
-// import { useEffect, useState } from 'react'
-// import axios from 'axios';
 import { SignedIn, SignedOut, useUser } from "@clerk/clerk-react";
 import Landing from "./pages/Landing";
 import DashBoard from "./pages/DashBoard/DashBoard.tsx";
@@ -11,9 +9,8 @@ import {
 import ErrorPage from "./ErrorPage.tsx";
 import Home from "./pages/DashBoard/Home/Home.tsx";
 import AIChat from "./pages/DashBoard/Home/AIChat.tsx";
-// interface DataType {
-//   message: string; // Thay đổi theo cấu trúc thực tế của dữ liệu
-// }
+import Document from "./pages/DashBoard/Document/Document.tsx";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -42,19 +39,14 @@ function App() {
           element: <AIChat />,
           errorElement: <ErrorPage />,
         },
+        {
+          path: "/:id",
+          element: <Document />,
+          errorElement: <ErrorPage />,
+        }
       ],
     },
   ]);
-  // const [data, setData] = useState<DataType>();
-  // useEffect(() => {
-  //   axios.get<DataType>('https://think-space-back-end-production.up.railway.app/')
-  //     .then(response => {
-  //       setData(response.data);
-  //       console.log(response.data);
-  //     })
-  //     .catch(error => console.error('Error fetching data:', error.message));
-  // }, []);
-  // console.log(data);
   return (
     <>
       <SignedOut>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { ChevronRight, File, type LucideIcon } from "lucide-react";
 
 import {
   Collapsible,
@@ -17,13 +17,17 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { Link } from "react-router-dom";
 
 export function NavPrivate({
   items,
+  addANewDocument,
 }: {
   items: {
     title: string;
-    url: string;
+    url?: string;
+    id?: string;
+    roomid?: string;
     icon?: LucideIcon;
     isActive?: boolean;
     items?: {
@@ -31,25 +35,29 @@ export function NavPrivate({
       url: string;
     }[];
   }[];
+  addANewDocument: () => void;
 }) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Private</SidebarGroupLabel>
+      <button onClick={addANewDocument}>plus</button>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
-            key={item.title}
+            key={item.id ? item.id : item.title}
             asChild
             defaultOpen={item.isActive}
             className="group/collapsible"
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                </SidebarMenuButton>
+                <Link to={`/${item.id ? item.id : item.url}`}>
+                  <SidebarMenuButton tooltip={item.title}>
+                    {item.icon ? <item.icon /> : <File />}
+                    <span>{item.title}</span>
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </Link>
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
