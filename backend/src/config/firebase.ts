@@ -16,7 +16,6 @@ export function initializeFirebaseAdmin() {
     FIREBASE_AUTH_PROVIDER_CERT_URL,
     FIREBASE_CLIENT_CERT_URL,
   } = process.env;
-  console.log(process.env);
   if (
     !FIREBASE_TYPE ||
     !FIREBASE_PROJECT_ID ||
