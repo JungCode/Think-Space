@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import { LiveblocksProvider, useRoom } from "@liveblocks/react/suspense";
+import { LiveblocksProvider } from "@liveblocks/react/suspense";
 import { ReactNode } from "react";
 import { useParams } from "react-router-dom";
 
