@@ -37,7 +37,6 @@ export function NavPrivate({
   }[];
   addANewDocument: () => void;
 }) {
-  const navigate = useNavigate();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Private</SidebarGroupLabel>
