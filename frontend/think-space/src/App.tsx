@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, useAuth, useUser } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, useUser } from "@clerk/clerk-react";
 import Landing from "./pages/Landing";
 import DashBoard from "./pages/DashBoard/DashBoard.tsx";
 import {
