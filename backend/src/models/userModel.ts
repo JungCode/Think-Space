@@ -4,6 +4,7 @@ import { IUser, UserSchema } from "../schemas/userSchema";
 export const getAllUsers = async () => {
   try {
     const usersSnapshot = await firestoreDb.collection("users").get();
+    console.log("usersSnapshot", usersSnapshot.docs);
     const users = usersSnapshot.docs.map((doc) => {
       const user = { id: doc.id, ...doc.data() };
       const { error, value } = UserSchema.validate(user);

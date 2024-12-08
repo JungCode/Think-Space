@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import * as Model from "../models/userModel";
 export const getIndex = async (req: Request, res: Response) => {
   try {
+    console.log("Getting all users");
     const users = await Model.getAllUsers();
     res.status(200).send(users);
   } catch (error) {
