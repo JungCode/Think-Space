@@ -9,7 +9,7 @@ interface Document {
 export const createANewDocument = async (token: string) => {
   try {
     const response = await axios.post<{ documentId: string }>(
-      "http://localhost:3000/documents",
+      "https://think-space-back-end-production.up.railway.app/documents",
       {
         title: "New page",
       },
@@ -30,7 +30,7 @@ export const createANewDocument = async (token: string) => {
 export const getUserDocuments = async (token: string): Promise<Document[]> => {
   try {
     const response = await axios.get<Document[]>(
-      "http://localhost:3000/documents/user",
+      "https://think-space-back-end-production.up.railway.app/documents/user",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ export const useOwner = async (
   // Fetch the room owner
   try {
     const response = await axios.get<{ owner: string }>(
-      `http://localhost:3000/documents/${roomId}`,
+      `https://think-space-back-end-production.up.railway.app/documents/${roomId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ export const useOwner = async (
 
 export const deleteADocument = async (documentId: string, token: string) => {
   try {
-    const response = await axios.delete(`http://localhost:3000/documents/${documentId}`, {
+    const response = await axios.delete(`https://think-space-back-end-production.up.railway.app/documents/${documentId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
