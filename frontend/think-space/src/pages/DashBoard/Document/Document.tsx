@@ -10,7 +10,7 @@ const Document = () => {
     <LiveBlocksProvider>
       <RoomProvider roomId={id}>
         <div className="min-h-screen flex flex-col items-center bg-white">
-          <div className="w-2/3">
+          <div className="lg:w-2/3 md:w-4/5 w-full">
             <Editor key={id} />
           </div>
         </div>

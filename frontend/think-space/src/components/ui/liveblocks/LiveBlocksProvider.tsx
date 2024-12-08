@@ -15,7 +15,7 @@ const LiveBlocksProvider = ({ children }: LiveBlocksProviderProps) => {
     <LiveblocksProvider
       key={roomId}
       authEndpoint={async () => {
-        const response = await fetch("https://think-space-back-end-production.up.railway.app/auth-endpoint", {
+        const response = await fetch("http://localhost:3000/auth-endpoint", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

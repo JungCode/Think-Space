@@ -51,7 +51,7 @@ export function NavMisc({
 
   return (
     <SidebarGroup>
-      <SidebarMenuItem>
+      <SidebarMenuItem className="list-none">
         <SidebarMenuButton className="group-data-[collapsible=icon]:hidden">
           <SidebarGroupLabel>{label}</SidebarGroupLabel>
         </SidebarMenuButton>
