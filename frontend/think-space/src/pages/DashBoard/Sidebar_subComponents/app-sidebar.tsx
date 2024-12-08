@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+
 import {
   BookOpen,
   Bot,
@@ -8,13 +9,14 @@ import {
   HelpCircle,
   Home,
   Inbox,
-  Notebook,
   Search,
   Trash2,
+  File,
+  UsersRound,
+  Pen,
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
-import { NavPrivate } from "@/pages/DashBoard/Sidebar_subComponents/nav-private";
 import { NavMisc } from "@/pages/DashBoard/Sidebar_subComponents/nav-misc";
 import { NavUser } from "@/pages/DashBoard/Sidebar_subComponents/nav-user";
 import { NavTeamspaces } from "./nav-teamspaces";
@@ -26,30 +28,11 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@clerk/clerk-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { createANewDocument, deleteADocument, getUserDocuments } from "@/api";
 // This is sample data.
 const data = {
-  // user: {
-  //   name: "shadcn",
-  //   email: "m@example.com",
-  //   avatar: "/avatars/shadcn.jpg",
-  // },
-  // teams: [
-  //   {
-  //     name: "Acme Inc",
-  //     logo: GalleryVerticalEnd,
-  //     plan: "Enterprise",
-  //   },
-  //   {
-  //     name: "Acme Corp.",
-  //     logo: AudioWaveform,
-  //     plan: "Startup",
-  //   },
-  //   {
-  //     name: "Evil Corp.",
-  //     logo: Command,
-  //     plan: "Free",
-  //   },
-  // ],
   navMain: [
     {
       title: "Search",
@@ -72,140 +55,103 @@ const data = {
       icon: Inbox,
     },
   ],
-  navTeamspaces: [
-    {
-      title: "Page1",
-      url: "#",
-      icon: BookOpen,
-      isActive: true,
-      items: [
-        {
-          title: "Subpage1_1",
-          url: "#",
-        },
-        {
-          title: "Subpage1_2",
-          url: "#",
-        },
-        {
-          title: "Subpage1_3",
-          url: "#",
-        },
-      ],
-    },
-  ],
+
   navPrivate: [
     {
-      title: "Page1",
-      url: "#",
-      icon: Notebook,
+      title: "Getting Started",
+      url: "/getting-started",
+      icon: File,
       isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
+      items: [],
     },
     {
-      title: "Page2",
-      url: "#",
-      icon: Notebook,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      title: "Scratchpad",
+      url: "/scratchpad",
+      icon: Pen,
+      items: [],
     },
     {
-      title: "Page3",
-      url: "#",
-      icon: Notebook,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Page4",
-      url: "#",
-      icon: Notebook,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+      title: "1:1 notes",
+      url: "/1-1-notes",
+      icon: UsersRound,
+      items: [],
     },
   ],
   navMisc: [
     {
-      name: "Help",
+      title: "Help",
       url: "#",
       icon: HelpCircle,
     },
     {
-      name: "Trash",
+      title: "Trash",
       url: "#",
       icon: Trash2,
     },
     {
-      name: "Settings",
+      title: "Settings",
       url: "#",
       icon: Cog,
     },
   ],
 };
-
+interface Document {
+  id: string;
+  title: string;
+}
 export function AppSidebar({
   user,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   user: { fullName: string; emailAddress: string; imageUrl: string };
 }) {
+  const [documents, setDocuments] = React.useState<Document[]>([]);
+  const { getToken } = useAuth();
+  const navigate = useNavigate();
+  const params = useParams();
+  React.useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const token = await getToken();
+        if (!token) return;
+        const data = await getUserDocuments(token);
+        setDocuments(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchDocuments();
+  }, [getToken]);
+  const addANewDocumentHandler = async () => {
+    const token = await getToken();
+    if (!token) return;
+    // Call the createANewDocument function
+    try {
+      const docId = await createANewDocument(token);
+      navigate(`/${docId}`);
+      setDocuments((prev) => [
+        ...prev,
+        {
+          id: docId,
+          title: "New page",
+        },
+      ]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const deleteHanlder = async (id: string) => {
+    const token = await getToken();
+    if (token) {
+      const data = await deleteADocument(id, token);
+      console.log(data);
+      setDocuments((prev) => prev.filter((doc) => doc.id !== id));
+      if(params.id == id) navigate("/home");
+    } else {
+      console.error("Token is null");
+    }
+    navigate("/home");
+  };
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -213,9 +159,27 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavTeamspaces items={data.navTeamspaces} />
-        <NavPrivate items={data.navPrivate} />
-        <NavMisc projects={data.navMisc} />
+        <NavMisc
+          projects={[]}
+          label="Shared"
+          getToken={getToken}
+          addANewDocument={addANewDocumentHandler}
+          deleteHanlder={deleteHanlder}
+        />
+        <NavMisc
+          projects={[...data.navPrivate, ...documents]}
+          label="Private"
+          getToken={getToken}
+          addANewDocument={addANewDocumentHandler}
+          deleteHanlder={deleteHanlder}
+        />
+        <NavMisc
+          projects={data.navMisc}
+          label="Setting"
+          getToken={getToken}
+          addANewDocument={addANewDocumentHandler}
+          deleteHanlder={deleteHanlder}
+        />
       </SidebarContent>
       <SidebarFooter></SidebarFooter>
       <SidebarRail />

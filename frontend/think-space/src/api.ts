@@ -43,3 +43,39 @@ export const getUserDocuments = async (token: string): Promise<Document[]> => {
     throw error; // Re-throw the error if the caller needs to handle it
   }
 };
+
+export const useOwner = async (
+  roomId: string,
+  userId: string,
+  token: string
+) => {
+  // Fetch the room owner
+  try {
+    const response = await axios.get<{ owner: string }>(
+      `http://localhost:3000/documents/${roomId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return userId == response.data.owner;
+  } catch (error) {
+    console.error("Error fetching owner:", (error as any).message);
+    throw error; // Re-throw the error if the caller needs to handle it
+  }
+};
+
+export const deleteADocument = async (documentId: string, token: string) => {
+  try {
+    const response = await axios.delete(`http://localhost:3000/documents/${documentId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting document:", (error as any).message);
+    throw error;
+  }
+}

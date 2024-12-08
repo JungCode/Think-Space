@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 // import { AppSidebar } from "@/pages/DashBoard/app-sidebar";
 import { AppSidebar } from "./Sidebar_subComponents/app-sidebar";
 
@@ -20,7 +20,7 @@ import { Separator } from "@/components/ui/separator";
 
 const DashBoard = () => {
   const { user } = useUser();
-
+  const location = useLocation();
   return (
     <SidebarProvider>
       {user && (
@@ -41,13 +41,22 @@ const DashBoard = () => {
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="#">
-                    Building Your Application
+                    {location.pathname === "/home"
+                      ? "Home"
+                      : location.pathname === "/chat"
+                      ? "Chat"
+                      : "Document"}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                {location.pathname != "/home" &&
+                location.pathname != "/chat" ? (
+                  <>
+                    <BreadcrumbSeparator className="hidden md:block" />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>{location.pathname.replace(/^\//, "")}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </>
+                ) : null}
               </BreadcrumbList>
             </Breadcrumb>
           </div>

@@ -1,21 +1,22 @@
-import React from 'react'
-import {
-
-  LiveblocksProvider,
-
-  RoomProvider,
-
-} from "@liveblocks/react/suspense";
-
+import RoomProvider from "@/components/ui/liveblocks/RoomProvider";
+import LiveBlocksProvider from "@/components/ui/liveblocks/LiveBlocksProvider";
+import Editor from "@/components/ui/liveblocks/Editor";
+import { useLocation } from "react-router-dom";
 const Document = () => {
+  const location = useLocation();
+  const path = location.pathname;
+  const id = path.substring(1);
   return (
-    <div>
-      <RoomProvider id='123'>
-        {/* Add your children components here */}
-        <div>Document Content</div>
-      </RoomProvider>
-    </div>
-  )
-}
+    <LiveBlocksProvider>
+      <RoomProvider roomId={id}>
+        <div className="min-h-screen flex flex-col items-center bg-white">
+          <div className="w-2/3">
+            <Editor key={id} />
+          </div>
+        </div>
+      </RoomProvider>{" "}
+    </LiveBlocksProvider>
+  );
+};
 
-export default Document
+export default Document;

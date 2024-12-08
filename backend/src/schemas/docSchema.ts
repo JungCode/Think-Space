@@ -4,7 +4,7 @@ import Joi from "joi";
 export const DocSchema = Joi.object({
   id: Joi.string().optional(),
   title: Joi.string().required(),
-  content: Joi.string().required(),
+  content: Joi.string().optional(),
   roomId: Joi.string().optional(),
   owner: Joi.string().required(),
   createdAt: Joi.date().default(() => new Date()), // Auto-populated if not provided
@@ -12,8 +12,9 @@ export const DocSchema = Joi.object({
 });
 
 export interface IDoc {
+  id?: string;
   title: string;
-  content: string;
+  content?: string;
   roomId?: string;
   owner: string;
   createdAt: Date;
