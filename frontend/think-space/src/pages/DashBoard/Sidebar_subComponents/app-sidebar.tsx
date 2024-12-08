@@ -3,7 +3,6 @@
 import * as React from "react";
 
 import {
-  BookOpen,
   Bot,
   Cog,
   HelpCircle,
@@ -19,7 +18,6 @@ import {
 import { NavMain } from "./nav-main";
 import { NavMisc } from "@/pages/DashBoard/Sidebar_subComponents/nav-misc";
 import { NavUser } from "@/pages/DashBoard/Sidebar_subComponents/nav-user";
-import { NavTeamspaces } from "./nav-teamspaces";
 
 import {
   Sidebar,
@@ -146,7 +144,7 @@ export function AppSidebar({
       const data = await deleteADocument(id, token);
       console.log(data);
       setDocuments((prev) => prev.filter((doc) => doc.id !== id));
-      if(params.id == id) navigate("/home");
+      if (params.id == id) navigate("/home");
     } else {
       console.error("Token is null");
     }
