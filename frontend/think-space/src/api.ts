@@ -54,7 +54,7 @@ export const useOwner = async (
   // Fetch the room owner
   try {
     const response = await axios.get<{ owner: string }>(
-      `http://think-space-back-end-production.up.railway.appdocuments/${roomId}`,
+      `http://think-space-back-end-production.up.railway.app/documents/${roomId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

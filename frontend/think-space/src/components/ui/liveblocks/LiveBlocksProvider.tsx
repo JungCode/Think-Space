@@ -15,18 +15,15 @@ const LiveBlocksProvider = ({ children }: LiveBlocksProviderProps) => {
     <LiveblocksProvider
       key={roomId}
       authEndpoint={async () => {
-        const response = await fetch(
-          "http://think-space-back-end-production.up.railway.app/auth-endpoint",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ roomId, userId: userId }),
-          }
-        );
+        const response = await fetch("http://think-space-back-end-production.up.railway.app/auth-endpoint", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ roomId, userId: userId }),
+        });
         const data = await response.json();
-        return { token: data };
+        return { token : data };
       }}
       throttle={16}
     >
