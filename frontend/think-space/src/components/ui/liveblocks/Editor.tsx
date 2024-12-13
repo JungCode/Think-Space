@@ -11,7 +11,6 @@ import stringToColor from "@/lib/stringToColor";
 import { useOwner } from "@/api";
 import { useAuth } from "@clerk/clerk-react";
 import EditorHeader from "./EditorHeader";
-import { is } from "node_modules/@blocknote/core/types/src/i18n/locales";
 
 type EditorProps = {
   doc: Y.Doc;
