@@ -92,7 +92,7 @@ export const updateADocument = async (
 ) => {
   try {
     const response = await axios.patch(
-      `http://think-space-back-end-production.up.railway.app/documents/${documentId}`,
+      `https://think-space-back-end-production.up.railway.app/documents/${documentId}`,
       {
         document,
       },
