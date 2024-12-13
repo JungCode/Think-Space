@@ -26,13 +26,15 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export function NavMisc({
   projects,
   label,
   addANewDocument,
-  deleteHanlder
+  deleteHanlder,
 }: {
   projects: {
     id?: string;
@@ -43,12 +45,23 @@ export function NavMisc({
   }[];
   label: string;
   getToken: () => string | null | Promise<string | null>;
-  addANewDocument: () => void;
-  deleteHanlder: (id: string) => void;
+  addANewDocument: () => Promise<void>;
+  deleteHanlder: (id: string) => Promise<void>;
 }) {
   const params = useParams();
+  const navigate = useNavigate();
   const { isMobile } = useSidebar();
-
+  const [isPending, setIsPending] = useState<string>("");
+  const deleteInSidebarHander = async (id: string) => {
+    setIsPending(id);
+    if (id) {
+      await deleteHanlder(id);
+      setIsPending("");
+      toast.success("Document deleted successfully");
+    } else {
+      toast.error("Cannot delete the document");
+    }
+  };
   return (
     <SidebarGroup>
       <SidebarMenuItem className="list-none">
@@ -70,13 +83,18 @@ export function NavMisc({
         {projects.map((item) => (
           <SidebarMenuItem key={item.id ? item.id : item.title}>
             <SidebarMenuButton
+              disabled={isPending != ""}
               asChild
-              isActive={(params.id === item.id && params.id) ? true : false}
+              isActive={params.id === item.id && params.id ? true : false}
               tooltip={item.title}
             >
               <Link to={item.url ? `/${item.url}` : `/${item.id}` || "#"}>
                 {item.icon ? <item.icon /> : <File />}
-                <span>{item.title}</span>
+                <span>
+                  {isPending == item.id && item.id != null
+                    ? "Deleting..."
+                    : item.title}
+                </span>
               </Link>
             </SidebarMenuButton>
             <DropdownMenu>
@@ -93,7 +111,13 @@ export function NavMisc({
               >
                 <DropdownMenuItem>
                   <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
+                  <span
+                    onClick={() =>
+                      navigate(item.url ? `/${item.url}` : `/${item.id}` || "#")
+                    }
+                  >
+                    View Project
+                  </span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Forward className="text-muted-foreground" />
@@ -102,7 +126,9 @@ export function NavMisc({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Trash2 className="text-muted-foreground" />
-                  <span onClick={() => item.id && deleteHanlder(item.id)}>
+                  <span
+                    onClick={() => item.id && deleteInSidebarHander(item.id)}
+                  >
                     Delete Project
                   </span>
                 </DropdownMenuItem>

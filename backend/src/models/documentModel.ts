@@ -106,14 +106,13 @@ export const createADocument = async (document: IDoc) => {
 
 export const updateADocument = async (documentId: string, document: IDoc) => {
   try {
-    const { error, value } = DocSchema.validate(document);
-    if (error) {
-      throw new Error("Error updating document: " + error.message);
-    }
     await firestoreDb
       .collection("documents")
       .doc(documentId)
-      .set(value, { merge: true });
+      .set(
+        { title: document.title, updatedAt: document.updatedAt },
+        { merge: true }
+      );
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("Error updating document: " + error.message);

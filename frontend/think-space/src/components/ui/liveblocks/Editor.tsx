@@ -18,18 +18,21 @@ type EditorProps = {
 };
 function BlockNote({ doc, provider }: EditorProps) {
   const userInfo = useSelf((me) => me.info);
-  const editor: BlockNoteEditor = useCreateBlockNote({
-    collaboration: {
-      provider,
-      fragment: doc.getXmlFragment("document-store"),
-      user: {
-        name: userInfo?.name || "Anonymous",
-        color: stringToColor(userInfo?.name || "Anonymous"),
+  const editor: BlockNoteEditor = useCreateBlockNote(
+    {
+      collaboration: {
+        provider,
+        fragment: doc.getXmlFragment("document-store"),
+        user: {
+          name: userInfo?.name || "Anonymous",
+          color: stringToColor(userInfo?.name || "Anonymous"),
+        },
       },
     },
-  },[doc, provider]);
+    [doc, provider]
+  );
   return (
-    <div className="relative max-w-6xl mx-auto">
+    <div className="relative max-w-6xl mx-auto border-t-2 mt-5">
       <BlockNoteView
         className="min-h-screen "
         theme="light"
@@ -38,7 +41,15 @@ function BlockNote({ doc, provider }: EditorProps) {
     </div>
   );
 }
-const Editor = () => {
+const Editor = ({
+  deleteHanlder,
+  getTitle,
+  updateADocumentTitle,
+}: {
+  deleteHanlder: (id: string) => Promise<void>;
+  getTitle: (id: string) => string;
+  updateADocumentTitle: (id: string, title: string) => Promise<void>;
+}) => {
   const room = useRoom();
   const [doc, setDoc] = useState<Y.Doc>();
   const [provider, setProvider] = useState<LiveblocksYjsProvider>();
@@ -72,7 +83,16 @@ const Editor = () => {
   }
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="h-10">{isOwner && <EditorHeader roomId={room.id} />}</div>
+      <div className="h-10">
+        {isOwner && (
+          <EditorHeader
+            deleteHanlder={deleteHanlder}
+            getTitle={getTitle}
+            updateADocumentTitle={updateADocumentTitle}
+            roomId={room.id}
+          />
+        )}
+      </div>
       <BlockNote key={room.id} doc={doc} provider={provider} />
     </div>
   );

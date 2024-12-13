@@ -26,9 +26,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@clerk/clerk-react";
-import { useNavigate, useParams } from "react-router-dom";
-import { createANewDocument, deleteADocument, getUserDocuments } from "@/api";
 // This is sample data.
 const data = {
   navMain: [
@@ -99,57 +96,18 @@ interface Document {
 }
 export function AppSidebar({
   user,
+  addANewDocumentHandler,
+  deleteHanlder,
+  documents,
+  getToken,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   user: { fullName: string; emailAddress: string; imageUrl: string };
+  addANewDocumentHandler: () => Promise<void>;
+  deleteHanlder: (id: string) => Promise<void>;
+  documents: Document[];
+  getToken: () => Promise<string | null>;
 }) {
-  const [documents, setDocuments] = React.useState<Document[]>([]);
-  const { getToken } = useAuth();
-  const navigate = useNavigate();
-  const params = useParams();
-  React.useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        const token = await getToken();
-        if (!token) return;
-        const data = await getUserDocuments(token);
-        setDocuments(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchDocuments();
-  }, [getToken]);
-  const addANewDocumentHandler = async () => {
-    const token = await getToken();
-    if (!token) return;
-    // Call the createANewDocument function
-    try {
-      const docId = await createANewDocument(token);
-      navigate(`/${docId}`);
-      setDocuments((prev) => [
-        ...prev,
-        {
-          id: docId,
-          title: "New page",
-        },
-      ]);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const deleteHanlder = async (id: string) => {
-    const token = await getToken();
-    if (token) {
-      const data = await deleteADocument(id, token);
-      console.log(data);
-      setDocuments((prev) => prev.filter((doc) => doc.id !== id));
-      if (params.id == id) navigate("/home");
-    } else {
-      console.error("Token is null");
-    }
-    navigate("/home");
-  };
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
