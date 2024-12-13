@@ -10,6 +10,6 @@ router.get("/", requireAuth(), Controller.getAllDocument);
 router.post("/", requireAuth(), Controller.createADocument);
 router.get("/user", requireAuth(), Controller.getDocumentsTitlebyUserId);
 router.get("/:id", Controller.getDocumentById);
-router.put("/:id", requireAuth(), Controller.updateADocument);
+router.patch("/:id", requireAuth(), Controller.updateADocument);
 router.delete("/:id", requireAuth(), Controller.deleteADocument);
 export default router;

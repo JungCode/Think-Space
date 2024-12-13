@@ -1,73 +1,116 @@
-import { useUser } from "@clerk/clerk-react";
-import { Outlet, useLocation } from "react-router-dom";
-// import { AppSidebar } from "@/pages/DashBoard/app-sidebar";
-import { AppSidebar } from "./Sidebar_subComponents/app-sidebar";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { useNavigate, useParams } from "react-router-dom";
 
+import { useEffect, useState } from "react";
 import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
+  createANewDocument,
+  deleteADocument,
+  getUserDocuments,
+  updateADocument,
+} from "@/api";
+import SidebarMain from "./Sidebar_subComponents/SidebarMain";
 
+interface Document {
+  id: string;
+  title: string;
+  updatedAt?: string;
+  createdAt?: string;
+}
 const DashBoard = () => {
   const { user } = useUser();
-  const location = useLocation();
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const { getToken } = useAuth();
+  const navigate = useNavigate();
+  const params = useParams();
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const token = await getToken();
+        if (!token) return;
+        const data = await getUserDocuments(token);
+        setDocuments(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchDocuments();
+  }, [getToken]);
+  const addANewDocumentHandler = async () => {
+    const token = await getToken();
+    if (!token) return;
+    // Call the createANewDocument function
+    try {
+      const docId = await createANewDocument(token);
+      navigate(`/${docId}`);
+      setDocuments((prev) => [
+        ...prev,
+        {
+          id: docId,
+          title: "New page",
+        },
+      ]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const deleteADocumentHanlder = async (id: string) => {
+    const token = await getToken();
+    if (token) {
+      const data = await deleteADocument(id, token);
+      console.log(data);
+      setDocuments((prev) => prev.filter((doc) => doc.id !== id));
+      if (params.id == id) navigate("/home");
+    } else {
+      console.error("Token is null");
+    }
+    navigate("/home");
+  };
+  const getTitle = (id: string) => {
+    const doc = documents.find((doc) => doc.id === id);
+    return doc?.title || "Untitled";
+  };
+  const updateADocumentTitle = async (id: string, title: string) => {
+    const token = await getToken();
+
+    if (token) {
+      await updateADocument(
+        id,
+        { id: id, title: title, updatedAt: new Date().toISOString() },
+        token
+      );
+      setDocuments((prev) =>
+        prev.map((doc) => {
+          if (doc.id === id) {
+            return {
+              ...doc,
+              title: title,
+            };
+          }
+          return doc;
+        })
+      );
+    } else {
+      console.error("Token is null");
+    }
+  };
   return (
-    <SidebarProvider>
-      {user && (
-        <AppSidebar
-          user={{
-            fullName: user.fullName || "",
+    user && (
+      <SidebarMain
+        addANewDocumentHandler={addANewDocumentHandler}
+        deleteADocumentHanlder={deleteADocumentHanlder}
+        documents={documents}
+        getToken={getToken}
+        getTitle={getTitle}
+        user={{
+          fullName: user.fullName || "",
+          primaryEmailAddress: {
             emailAddress: user.primaryEmailAddress?.emailAddress || "",
-            imageUrl: user.imageUrl || "",
-          }}
-        />
-      )}
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="h-4 mr-2" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    {location.pathname === "/home"
-                      ? "Home"
-                      : location.pathname === "/chat"
-                      ? "Chat"
-                      : "Document"}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                {location.pathname != "/home" &&
-                location.pathname != "/chat" ? (
-                  <>
-                    <BreadcrumbSeparator className="hidden md:block" />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>{location.pathname.replace(/^\//, "")}</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </>
-                ) : null}
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-        </header>
-        <div className="flex flex-col flex-1 gap-4 p-4 pt-0">
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            <Outlet />
-          </div>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+          },
+          imageUrl: user.imageUrl,
+        }}
+        updateADocumentTitle={updateADocumentTitle}
+      />
+    )
   );
 };
 

@@ -3,6 +3,7 @@ import * as Model from "../models/documentModel";
 import { saveARoom } from "../models/roomModel";
 import dotenv from "dotenv";
 import { deleteLiveBlocksRoom } from "./liveblocksController";
+import { create } from "domain";
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ export const getDocumentsTitlebyUserId = async (
         title: doc.title,
         id: doc.id,
         updatedAt: doc.updatedAt,
+        createdAt: doc.createdAt,
       }));
       res.status(200).send(documentTitles);
     }
@@ -92,7 +94,7 @@ export const updateADocument = async (req: Request, res: Response) => {
       res.status(401).send({ message: "Unauthorized" });
     } else {
       const documentId = req.params.id;
-      const document = req.body;
+      const document = req.body.document;
       await Model.updateADocument(documentId, document);
       res.status(204).send();
     }

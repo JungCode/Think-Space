@@ -19,7 +19,6 @@ export const authEndpoint = async (req: Request, res: Response) => {
 };
 export const deleteLiveBlocksRoom = async (roomId: string) => {
   try {
-    console.log(roomId);
     const response = await axios.delete(
       `https://api.liveblocks.io/v2/rooms/${roomId}`,
       {
