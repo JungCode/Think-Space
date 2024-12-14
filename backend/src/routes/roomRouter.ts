@@ -3,5 +3,5 @@ import * as Controller from "../controllers/roomController";
 const router = Router();
 
 router.get("/:id", Controller.getRoomsByUserId);
-router.post("/", Controller.saveARoom);
+router.post("/:id", Controller.saveARoom);
 export default router;

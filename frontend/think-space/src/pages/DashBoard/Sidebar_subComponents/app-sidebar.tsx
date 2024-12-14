@@ -26,6 +26,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { toast } from "sonner";
 // This is sample data.
 const data = {
   navMain: [
@@ -95,6 +96,7 @@ interface Document {
   title: string;
 }
 export function AppSidebar({
+  sharedDocuments,
   user,
   addANewDocumentHandler,
   deleteHanlder,
@@ -107,6 +109,7 @@ export function AppSidebar({
   deleteHanlder: (id: string) => Promise<void>;
   documents: Document[];
   getToken: () => Promise<string | null>;
+  sharedDocuments: Document[];
 }) {
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -116,7 +119,7 @@ export function AppSidebar({
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavMisc
-          projects={[]}
+          projects={[...sharedDocuments]}
           label="Shared"
           getToken={getToken}
           addANewDocument={addANewDocumentHandler}

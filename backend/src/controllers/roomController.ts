@@ -14,12 +14,10 @@ export const getRoomsByUserId = async (req: Request, res: Response) => {
 };
 export const saveARoom = async (req: Request, res: Response) => {
   try {
-    const roomId = req.body.id;
-    const room = {
-      documentId: req.body.documentId,
-    };
-    const userId = req.body.userId;
-    const roomRes = await Model.saveARoom(userId, roomId);
+    const roomId = req.params.id;
+    const userId = req.body.email;
+    const title = req.body.title;
+    const roomRes = await Model.saveARoom(userId, roomId, title);
     res.status(201).send({ roomRes });
   } catch (error) {
     if (error instanceof Error) {

@@ -108,3 +108,72 @@ export const updateADocument = async (
     throw error;
   }
 };
+export const inviteAUserToRoom = async (
+  roomId: string,
+  email: string,
+  token: string,
+  title: string
+) => {
+  try {
+    const response = await axios.post<{ roomRes: string }>(
+      `https://think-space-back-end-production.up.railway.app/rooms/${roomId}`,
+      {
+        email,
+        title,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.roomRes;
+  } catch (error) {
+    console.error("Error inviting user to room:", (error as any).message);
+    throw error;
+  }
+};
+export const saveAUser = async (email: string, username: string) => {
+  try {
+    const response = await axios.post(`https://think-space-back-end-production.up.railway.app/`, {
+      username: username,
+      email: email,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error saving user:", (error as any).message);
+    throw error;
+  }
+};
+export const getSharedDocuments = async (token: string, userId: string) => {
+  try {
+    const response = await axios.get<Document[]>(
+      `https://think-space-back-end-production.up.railway.app/rooms/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching shared documents:", (error as any).message);
+    throw error;
+  }
+};
+export const getSharedRoomsbyUserId = async (token: string, userId: string) => {
+  try {
+    const response = await axios.get<Document[]>(
+      `https://think-space-back-end-production.up.railway.app/rooms/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching shared rooms:", (error as any).message);
+    throw error;
+  }
+};
