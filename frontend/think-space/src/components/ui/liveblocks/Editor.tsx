@@ -84,14 +84,13 @@ const Editor = ({
   return (
     <div className="max-w-6xl mx-auto">
       <div className="h-10">
-        {isOwner && (
           <EditorHeader
             deleteHanlder={deleteHanlder}
             getTitle={getTitle}
             updateADocumentTitle={updateADocumentTitle}
             roomId={room.id}
+            isOwner={isOwner}
           />
-        )}
       </div>
       <BlockNote key={room.id} doc={doc} provider={provider} />
     </div>

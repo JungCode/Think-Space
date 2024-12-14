@@ -113,6 +113,17 @@ export const updateADocument = async (documentId: string, document: IDoc) => {
         { title: document.title, updatedAt: document.updatedAt },
         { merge: true }
       );
+    const querySnapshot = await firestoreDb
+      .collectionGroup("rooms")
+      .where("roomId", "==", documentId)
+      .get();
+
+    const batch = firestoreDb.batch();
+    querySnapshot.forEach((doc) => {
+      batch.update(doc.ref, { title: document.title }); // Thay đổi "New Title" bằng tiêu đề bạn muốn cập nhật
+    });
+
+    await batch.commit();
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("Error updating document: " + error.message);
@@ -122,10 +133,10 @@ export const updateADocument = async (documentId: string, document: IDoc) => {
   }
 };
 
-export const deleteADocument = async (documentId: string, userId: string) => {
+export const deleteADocument = async (documentId: string) => {
   try {
     await firestoreDb.collection("documents").doc(documentId).delete();
-    deleteRoom(userId, documentId);
+    deleteRoom(documentId);
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("Error deleting document: " + error.message);

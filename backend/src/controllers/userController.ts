@@ -15,8 +15,8 @@ export const getIndex = async (req: Request, res: Response) => {
 export const saveAUser = async (req: Request, res: Response) => {
   try {
     const user = req.body;
-    const userId = await Model.saveAUser(user);
-    res.status(201).send({ userId });
+    const userEmail = await Model.saveAUser(user);
+    res.status(201).send({ userEmail });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).send({ message: error.message });

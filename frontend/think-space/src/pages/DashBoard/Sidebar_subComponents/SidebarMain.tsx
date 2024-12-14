@@ -26,6 +26,7 @@ const SidebarMain = ({
   getToken,
   getTitle,
   updateADocumentTitle,
+  sharedDocuments,
 }: {
   user: {
     fullName: string;
@@ -38,6 +39,7 @@ const SidebarMain = ({
   getToken: () => Promise<string | null>;
   getTitle: (id: string) => string;
   updateADocumentTitle: (id: string, title: string) => Promise<void>;
+  sharedDocuments: { id: string; title: string }[];
 }) => {
   return (
     <SidebarProvider>
@@ -46,6 +48,7 @@ const SidebarMain = ({
           addANewDocumentHandler={addANewDocumentHandler}
           deleteHanlder={deleteADocumentHanlder}
           documents={documents}
+          sharedDocuments={sharedDocuments}
           getToken={getToken}
           user={{
             fullName: user.fullName || "",
@@ -93,6 +96,7 @@ const SidebarMain = ({
                 deleteADocumentHanlder,
                 getTitle,
                 updateADocumentTitle,
+                getToken,
               }}
             />
           </div>

@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import {
   createANewDocument,
   deleteADocument,
+  getSharedRoomsbyUserId,
   getUserDocuments,
+  saveAUser,
   updateADocument,
 } from "@/api";
 import SidebarMain from "./Sidebar_subComponents/SidebarMain";
@@ -19,16 +21,27 @@ interface Document {
 const DashBoard = () => {
   const { user } = useUser();
   const [documents, setDocuments] = useState<Document[]>([]);
+  const [sharedDocuments, setSharedDocuments] = useState<Document[]>([]);
   const { getToken } = useAuth();
   const navigate = useNavigate();
   const params = useParams();
+  console.log(sharedDocuments);
   useEffect(() => {
+    saveAUser(
+      user?.primaryEmailAddress?.emailAddress || "",
+      user?.username || ""
+    );
     const fetchDocuments = async () => {
       try {
         const token = await getToken();
         if (!token) return;
         const data = await getUserDocuments(token);
         setDocuments(data);
+        const sharedDocuments = await getSharedRoomsbyUserId(
+          token,
+          user?.primaryEmailAddress?.emailAddress || ""
+        );
+        setSharedDocuments(sharedDocuments);
       } catch (err) {
         console.log(err);
       }
@@ -57,7 +70,7 @@ const DashBoard = () => {
     const token = await getToken();
     if (token) {
       const data = await deleteADocument(id, token);
-      console.log(data);
+      if(data){}
       setDocuments((prev) => prev.filter((doc) => doc.id !== id));
       if (params.id == id) navigate("/home");
     } else {
@@ -66,7 +79,7 @@ const DashBoard = () => {
     navigate("/home");
   };
   const getTitle = (id: string) => {
-    const doc = documents.find((doc) => doc.id === id);
+    const doc = [...documents,...sharedDocuments].find((doc) => doc.id === id);
     return doc?.title || "Untitled";
   };
   const updateADocumentTitle = async (id: string, title: string) => {
@@ -99,6 +112,7 @@ const DashBoard = () => {
         addANewDocumentHandler={addANewDocumentHandler}
         deleteADocumentHanlder={deleteADocumentHanlder}
         documents={documents}
+        sharedDocuments={sharedDocuments}
         getToken={getToken}
         getTitle={getTitle}
         user={{

@@ -6,16 +6,17 @@ interface OutletContextType {
   deleteADocumentHanlder: () => Promise<void>;
   getTitle: (id: string) => string;
   updateADocumentTitle: (id: string, title: string) => Promise<void>;
+  getToken: () => Promise<string | null>;
 }
 
 const Document = () => {
   const location = useLocation();
   const path = location.pathname;
   const id = path.substring(1);
-  const { deleteADocumentHanlder, getTitle, updateADocumentTitle } =
+  const { deleteADocumentHanlder, getTitle, updateADocumentTitle, getToken } =
     useOutletContext<OutletContextType>();
   return (
-    <LiveBlocksProvider>
+    <LiveBlocksProvider getToken={getToken}>
       <RoomProvider roomId={id}>
         <div className="min-h-screen flex flex-col items-center bg-white">
           <div className="lg:w-2/3 md:w-4/5 w-full">

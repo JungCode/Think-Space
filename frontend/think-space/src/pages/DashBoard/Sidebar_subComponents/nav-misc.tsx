@@ -80,6 +80,9 @@ export function NavMisc({
         </DropdownMenu>
       </SidebarMenuItem>
       <SidebarMenu>
+        {projects.length === 0 && (
+          <div className="flex pl-4 text-neutral-400">No projects found</div>
+        )}
         {projects.map((item) => (
           <SidebarMenuItem key={item.id ? item.id : item.title}>
             <SidebarMenuButton
@@ -97,43 +100,47 @@ export function NavMisc({
                 </span>
               </Link>
             </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
-              >
-                <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span
-                    onClick={() =>
-                      navigate(item.url ? `/${item.url}` : `/${item.id}` || "#")
-                    }
-                  >
-                    View Project
-                  </span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span
-                    onClick={() => item.id && deleteInSidebarHander(item.id)}
-                  >
-                    Delete Project
-                  </span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {label === "Private" && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuAction showOnHover>
+                    <MoreHorizontal />
+                    <span className="sr-only">More</span>
+                  </SidebarMenuAction>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-48 rounded-lg"
+                  side={isMobile ? "bottom" : "right"}
+                  align={isMobile ? "end" : "start"}
+                >
+                  <DropdownMenuItem>
+                    <Folder className="text-muted-foreground" />
+                    <span
+                      onClick={() =>
+                        navigate(
+                          item.url ? `/${item.url}` : `/${item.id}` || "#"
+                        )
+                      }
+                    >
+                      View Project
+                    </span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Forward className="text-muted-foreground" />
+                    <span>Share Project</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Trash2 className="text-muted-foreground" />
+                    <span
+                      onClick={() => item.id && deleteInSidebarHander(item.id)}
+                    >
+                      Delete Project
+                    </span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </SidebarMenuItem>
         ))}
       </SidebarMenu>

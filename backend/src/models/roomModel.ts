@@ -1,6 +1,5 @@
 import { firestoreDb } from "../app"; // Đường dẫn đến app.ts của bạn
-import { RoomSchema, IRoom } from "../schemas/roomSchema";
-
+import { IRoom } from "../schemas/roomSchema";
 export const getRoomsByUserId = async (userId: string) => {
   try {
     const roomsRef = firestoreDb
@@ -22,16 +21,20 @@ export const getRoomsByUserId = async (userId: string) => {
   }
 };
 
-export const saveARoom = async (userId: string, roomId: string) => {
+export const saveARoom = async (
+  userId: string,
+  roomId: string,
+  title: string
+) => {
   try {
-    const roomsRef = firestoreDb
-      .collection("users")
-      .doc(userId)
-      .collection("rooms")
-      .doc(roomId);
-    await roomsRef.set({ merge: true });
-    console.log(roomsRef.id);
-    return roomsRef.id;
+    const userRef = firestoreDb.collection("users").doc(userId);
+    const userDoc = await userRef.get();
+    if (!userDoc.exists) {
+      return false;
+    }
+    const roomsRef = userRef.collection("rooms").doc(roomId);
+    await roomsRef.set({ title, roomId }, { merge: true });
+    return true;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("Error fetching documents: " + error.message);
@@ -41,14 +44,17 @@ export const saveARoom = async (userId: string, roomId: string) => {
   }
 };
 //delete a room
-export const deleteRoom = async (userId: string, roomId: string) => {
+export const deleteRoom = async (roomId: string) => {
   try {
-    const roomsRef = firestoreDb
-      .collection("users")
-      .doc(userId)
-      .collection("rooms")
-      .doc(roomId);
-    await roomsRef.delete();
+    const querySnapshot = await firestoreDb
+      .collectionGroup("rooms")
+      .where("roomId", "==", roomId)
+      .get();
+    const batch = firestoreDb.batch();
+    querySnapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("Error fetching documents: " + error.message);

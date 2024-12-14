@@ -3,12 +3,15 @@ import { liveblocks } from "../app";
 import axios from "axios";
 
 export const authEndpoint = async (req: Request, res: Response) => {
-  const { roomId } = req.body;
-  const { userId } = req.body;
+  const { roomId, userId, username } = req.body;
   try {
-    const session = liveblocks.prepareSession(
-      userId // Required, user ID from your DB
-    );
+    const session = liveblocks.prepareSession(userId, {
+      userInfo: {
+        name: username,
+        email: "",
+        avatar: "",
+      },
+    });
     session.allow(roomId, session.FULL_ACCESS);
     const { body, status } = await session.authorize();
     const parsedBody = JSON.parse(body);

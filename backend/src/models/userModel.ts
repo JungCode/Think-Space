@@ -27,7 +27,8 @@ export const saveAUser = async (user: IUser) => {
     if (error) {
       throw new Error("Error creating user: " + error.message);
     }
-    const userRef = firestoreDb.collection("users").doc(value.id);
+
+    const userRef = firestoreDb.collection("users").doc(value.email);
     await userRef.set(value); // Use 'set' instead of 'add' to specify the ID
     return userRef.id;
   } catch (error: unknown) {

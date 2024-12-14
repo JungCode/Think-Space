@@ -75,7 +75,6 @@ export const createADocument = async (req: Request, res: Response) => {
     } else {
       const document = { owner: auth.userId, ...req.body };
       const documentId = await Model.createADocument(document);
-      const roomId = await saveARoom(auth.userId, documentId);
       res.status(201).send({ documentId });
     }
   } catch (error) {
@@ -114,7 +113,7 @@ export const deleteADocument = async (req: Request, res: Response) => {
       res.status(401).send({ message: "Unauthorized" });
     } else {
       const documentId = req.params.id;
-      await Model.deleteADocument(documentId, auth.userId);
+      await Model.deleteADocument(documentId);
       await deleteLiveBlocksRoom(documentId);
       res.status(204).send();
     }
