@@ -26,7 +26,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { toast } from "sonner";
 // This is sample data.
 const data = {
   navMain: [
