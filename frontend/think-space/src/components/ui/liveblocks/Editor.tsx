@@ -11,6 +11,8 @@ import stringToColor from "@/lib/stringToColor";
 import { useOwner } from "@/api";
 import { useAuth } from "@clerk/clerk-react";
 import EditorHeader from "./EditorHeader";
+import TranslateDocument from "./TranslateDocument";
+import ChatToDocument from "./ChatToDocument";
 
 type EditorProps = {
   doc: Y.Doc;
@@ -32,7 +34,11 @@ function BlockNote({ doc, provider }: EditorProps) {
     [doc, provider]
   );
   return (
-    <div className="relative max-w-6xl mx-auto border-t-2 mt-5">
+    <div className="relative max-w-6xl mx-auto border-t-2 mt-5 pt-5">
+      <div className="flex items-center gap-2 justify-end">
+        <TranslateDocument doc={doc} />
+        <ChatToDocument doc={doc} />
+      </div>
       <BlockNoteView
         className="min-h-screen "
         theme="light"
@@ -83,14 +89,14 @@ const Editor = ({
   }
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="h-10">
-          <EditorHeader
-            deleteHanlder={deleteHanlder}
-            getTitle={getTitle}
-            updateADocumentTitle={updateADocumentTitle}
-            roomId={room.id}
-            isOwner={isOwner}
-          />
+      <div className="">
+        <EditorHeader
+          deleteHanlder={deleteHanlder}
+          getTitle={getTitle}
+          updateADocumentTitle={updateADocumentTitle}
+          roomId={room.id}
+          isOwner={isOwner}
+        />
       </div>
       <BlockNote key={room.id} doc={doc} provider={provider} />
     </div>

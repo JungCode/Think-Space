@@ -63,3 +63,25 @@ export const deleteRoom = async (roomId: string) => {
     }
   }
 };
+
+export const removeARoom = async (roomId: string, userEmail: string) => {
+  try {
+    const roomsRef = firestoreDb
+      .collection("users")
+      .doc(userEmail)
+      .collection("rooms")
+      .where("roomId", "==", roomId);
+    const roomSnapshot = await roomsRef.get();
+    // Lặp qua các kết quả và xóa từng tài liệu
+    const deletePromises = roomSnapshot.docs.map((doc) => doc.ref.delete());
+    // Chờ tất cả các tài liệu được xóa
+    await Promise.all(deletePromises);
+    return true;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error("Error fetching documents: " + error.message);
+    } else {
+      throw new Error("Error fetching documents: An unknown error occurred");
+    }
+  }
+};

@@ -177,3 +177,126 @@ export const getSharedRoomsbyUserId = async (token: string, userId: string) => {
     throw error;
   }
 };
+
+export const getUsersByRoom = async (roomId: string, token: string) => {
+  try {
+    const response = await axios.get<Document[]>(
+      `https://think-space-back-end-production.up.railway.app/byRoom/${roomId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users by room:", (error as any).message);
+    throw error;
+  }
+};
+
+export const removeARoom = async (
+  roomId: string,
+  userEmail: string,
+  token: string
+) => {
+  try {
+    const response = await axios.post(
+      `https://think-space-back-end-production.up.railway.app/rooms/removeARoom/${roomId}`,
+      {
+        userEmail,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users by room:", (error as any).message);
+    throw error;
+  }
+};
+export const askAIQuestion = async (
+  documentData: any,
+  language: string,
+  setSummary: React.Dispatch<React.SetStateAction<string>>
+) => {
+  try {
+    const response = await fetch("https://think-space-back-end-production.up.railway.app/askAIQuestion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        language: language,
+        documentData: documentData,
+      }),
+    });
+    const reader = response.body?.getReader();
+    if (!reader) {
+      throw new Error("Failed to get reader from response body");
+    }
+    const decoder = new TextDecoder("utf-8");
+
+    let result = "";
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      result += chunk;
+
+      // Update useState with the latest chunk
+      setSummary((prev) => prev + chunk);
+    }
+    return result;
+  } catch (error) {
+    console.error("Error asking AI question:", (error as any).message);
+    throw error;
+  }
+};
+
+export const chatToDocument = async (
+  documentData: any,
+  question: string,
+  setSummary: React.Dispatch<React.SetStateAction<string>>
+) => {
+  try {
+    const response = await fetch(
+      "https://think-space-back-end-production.up.railway.app/askAIQuestion/chatToDocument",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: question,
+          documentData: documentData,
+        }),
+      }
+    );
+    const reader = response.body?.getReader();
+    if (!reader) {
+      throw new Error("Failed to get reader from response body");
+    }
+    const decoder = new TextDecoder("utf-8");
+
+    let result = "";
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      result += chunk;
+
+      // Update useState with the latest chunk
+      setSummary((prev) => prev + chunk);
+    }
+    return result;
+  } catch (error) {
+    console.error("Error asking AI question:", (error as any).message);
+    throw error;
+  }
+};

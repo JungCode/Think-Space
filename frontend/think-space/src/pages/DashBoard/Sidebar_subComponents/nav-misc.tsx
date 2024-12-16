@@ -80,9 +80,6 @@ export function NavMisc({
         </DropdownMenu>
       </SidebarMenuItem>
       <SidebarMenu>
-        {projects.length === 0 && (
-          <div className="flex pl-4 text-neutral-400">No projects found</div>
-        )}
         {projects.map((item) => (
           <SidebarMenuItem key={item.id ? item.id : item.title}>
             <SidebarMenuButton
@@ -90,7 +87,7 @@ export function NavMisc({
               asChild
               isActive={params.id === item.id && params.id ? true : false}
               tooltip={item.title}
-            >
+              >
               <Link to={item.url ? `/${item.url}` : `/${item.id}` || "#"}>
                 {item.icon ? <item.icon /> : <File />}
                 <span>

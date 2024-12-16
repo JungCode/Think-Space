@@ -54,20 +54,20 @@ const data = {
   navPrivate: [
     {
       title: "Getting Started",
-      url: "/getting-started",
+      url: "getting-started",
       icon: File,
       isActive: true,
       items: [],
     },
     {
       title: "Scratchpad",
-      url: "/scratchpad",
+      url: "scratchpad",
       icon: Pen,
       items: [],
     },
     {
       title: "1:1 notes",
-      url: "/1-1-notes",
+      url: "1-1-notes",
       icon: UsersRound,
       items: [],
     },
