@@ -14,21 +14,31 @@ const LiveBlocksProvider = ({
 }: LiveBlocksProviderProps) => {
   const params = useParams();
   const roomId = params.id;
-  const userId = useUser().user?.id;
-  const username = useUser().user?.username;
+  const { user } = useUser();
+  const userId = user?.id;
+  const username = user?.username;
+  const avatar = user?.imageUrl; // URL của avatar
   return (
     <LiveblocksProvider
       key={roomId}
       authEndpoint={async () => {
         const token = await getToken();
-        const response = await fetch("https://think-space-back-end-production.up.railway.app/auth-endpoint", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ roomId, userId: userId, username: username }),
-        });
+        const response = await fetch(
+          "https://think-space-back-end-production.up.railway.app/auth-endpoint",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              roomId,
+              userId: userId,
+              username: username,
+              avatar
+            }),
+          }
+        );
         const data = await response.json();
         return { token: data };
       }}

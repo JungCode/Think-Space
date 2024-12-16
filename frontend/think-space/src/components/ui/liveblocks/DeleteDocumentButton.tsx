@@ -13,10 +13,12 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { toast } from "sonner";
 const DeleteDocumentButton = ({
   deleteHanlder,
+  isOwner,
   roomId,
 }: {
   deleteHanlder: (id: string) => Promise<void>;
   roomId: string;
+  isOwner: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
@@ -33,7 +35,7 @@ const DeleteDocumentButton = ({
   };
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <Button asChild variant="destructive">
+      <Button asChild variant="destructive" disabled={!isOwner}>
         <DialogTrigger>Delete</DialogTrigger>
       </Button>
       <DialogContent>

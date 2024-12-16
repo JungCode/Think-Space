@@ -1,15 +1,15 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import { liveblocks } from "../app";
 import axios from "axios";
 
 export const authEndpoint = async (req: Request, res: Response) => {
-  const { roomId, userId, username } = req.body;
+  const { roomId, userId, username, avatar } = req.body;
   try {
     const session = liveblocks.prepareSession(userId, {
       userInfo: {
         name: username,
         email: "",
-        avatar: "",
+        avatar: avatar,
       },
     });
     session.allow(roomId, session.FULL_ACCESS);

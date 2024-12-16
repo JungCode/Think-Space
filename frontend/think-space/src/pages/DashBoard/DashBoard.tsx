@@ -25,7 +25,6 @@ const DashBoard = () => {
   const { getToken } = useAuth();
   const navigate = useNavigate();
   const params = useParams();
-  console.log(sharedDocuments);
   useEffect(() => {
     saveAUser(
       user?.primaryEmailAddress?.emailAddress || "",

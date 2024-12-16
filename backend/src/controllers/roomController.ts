@@ -27,3 +27,17 @@ export const saveARoom = async (req: Request, res: Response) => {
     }
   }
 };
+export const removeARoom = async (req: Request, res: Response) => {
+  try {
+    const roomId = req.params.id;
+    const userEmail = req.body.userEmail;
+    const room = await Model.removeARoom(roomId, userEmail);
+    res.status(200).send(room);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).send({ message: error.message });
+    } else {
+      throw new Error("Error fetching rooms: An unknown error occurred");
+    }
+  }
+};

@@ -14,15 +14,20 @@ import { useAuth } from "@clerk/clerk-react";
 import { inviteAUserToRoom } from "@/api";
 const InviteUser = ({
   roomId,
+  isOwner,
   getTitle,
+  updateUsers,
 }: {
   roomId: string;
+  isOwner: boolean;
   getTitle: (id: string) => string;
+  updateUsers: (email: string) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [email, setEmail] = useState<string>("");
   const { getToken } = useAuth();
+
   const inviteHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsPending(true);
@@ -37,6 +42,7 @@ const InviteUser = ({
       setIsPending(false);
       if (data) {
         toast.success("User Added to Room successfully");
+        updateUsers(email);
       } else {
         toast.error("Cannot find user with this email");
       }
@@ -47,7 +53,7 @@ const InviteUser = ({
   };
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <Button asChild variant="outline">
+      <Button asChild variant="outline" disabled={!isOwner}>
         <DialogTrigger>Invite</DialogTrigger>
       </Button>
       <DialogContent>
