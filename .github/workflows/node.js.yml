@@ -81,6 +81,7 @@ jobs:
         echo LIVEBLOCKS_SECRET_KEY=${{ secrets.LIVEBLOCKS_SECRET_KEY }} >> backend/.env
         echo CLERK_PUBLISHABLE_KEY=${{ secrets.CLERK_PUBLISHABLE_KEY }} >> backend/.env
         echo CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }} >> backend/.env
+        echo AI_API_KEY=${{ secrets.AI_API_KEY }} >> backend/.env
       shell: bash
 
 
