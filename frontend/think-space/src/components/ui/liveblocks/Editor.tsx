@@ -34,8 +34,8 @@ function BlockNote({ doc, provider }: EditorProps) {
     [doc, provider]
   );
   return (
-    <div className="relative max-w-6xl mx-auto border-t-2 mt-5 pt-5">
-      <div className="flex items-center gap-2 justify-end">
+    <div className="relative max-w-6xl pt-5 mx-auto mt-5 border-t-2 border-dashed border-zinc-700">
+      <div className="flex items-center justify-end gap-2 pb-4 mb-4 ">
         <TranslateDocument doc={doc} />
         <ChatToDocument doc={doc} />
       </div>

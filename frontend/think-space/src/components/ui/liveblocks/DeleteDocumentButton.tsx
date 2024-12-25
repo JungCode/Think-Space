@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Button } from "../button";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 const DeleteDocumentButton = ({
   deleteHanlder,
   isOwner,
@@ -36,7 +37,9 @@ const DeleteDocumentButton = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <Button asChild variant="destructive" disabled={!isOwner}>
-        <DialogTrigger>Delete</DialogTrigger>
+        <DialogTrigger>
+          <X />
+        </DialogTrigger>
       </Button>
       <DialogContent>
         <DialogHeader>
@@ -46,7 +49,7 @@ const DeleteDocumentButton = ({
             users from the document.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="sm:justify-end gap-2">
+        <DialogFooter className="gap-2 sm:justify-end">
           <Button
             type="button"
             variant="destructive"

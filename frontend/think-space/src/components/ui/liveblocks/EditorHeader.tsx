@@ -8,6 +8,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { getUsersByRoom, removeARoom } from "@/api";
 import { useParams } from "react-router-dom";
 import Avatars from "./Avatars";
+import { RefreshCw, Save } from "lucide-react";
 
 type User = {
   username?: string;
@@ -86,10 +87,10 @@ const EditorHeader = ({
 
   return (
     <div className="">
-      <div className="flex justify-end gap-2 w-full items-center">
+      <div className="flex items-center justify-end w-full gap-2">
         {" "}
         <input
-          className="w-full h-12 rounded-lg border-2 text-xl pl-3 focus:border-black focus:outline-none"
+          className="w-full h-12 px-2 text-lg bg-gray-100 border-2 border-gray-300 rounded-lg focus:border-gray-900 focus:outline-none"
           value={input}
           onKeyDown={(e) => {
             if (e.key === "Enter") updateHandler();
@@ -98,20 +99,31 @@ const EditorHeader = ({
           readOnly={!isOwner}
         />
         <Button
-          variant="default"
           onClick={updateHandler}
           disabled={!isOwner || isPending}
+          className={`flex items-center justify-center h-12 px-4 text-lg font-semibold text-white rounded-lg transition-colors duration-300 ${
+            isPending
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-gray-800 hover:bg-black"
+          }`}
         >
-          {isPending ? "Updating..." : "Update"}
+          {isPending ? <RefreshCw className="animate-spin" /> : <Save />}
         </Button>
-        <InviteUser updateUsers={updateUsers} roomId={roomId} getTitle={getTitle} isOwner={isOwner} />
-        <DeleteDocumentButton
-          deleteHanlder={deleteHanlder}
-          roomId={roomId}
-          isOwner={isOwner}
-        />
+        <div className="flex flex-row gap-2 pl-2 border-l-2 border-gray-600">
+          <InviteUser
+            updateUsers={updateUsers}
+            roomId={roomId}
+            getTitle={getTitle}
+            isOwner={isOwner}
+          />
+          <DeleteDocumentButton
+            deleteHanlder={deleteHanlder}
+            roomId={roomId}
+            isOwner={isOwner}
+          />
+        </div>
       </div>
-      <div className="mt-3 flex justify-between">
+      <div className="flex justify-between mt-3">
         <ManageUsers
           isPending={isRemovePending}
           isOwner={isOwner}

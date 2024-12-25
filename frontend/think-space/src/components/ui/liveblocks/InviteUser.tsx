@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Input } from "../input";
 import { useAuth } from "@clerk/clerk-react";
 import { inviteAUserToRoom } from "@/api";
+import { UserRoundPlus } from "lucide-react";
 const InviteUser = ({
   roomId,
   isOwner,
@@ -54,7 +55,9 @@ const InviteUser = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <Button asChild variant="outline" disabled={!isOwner}>
-        <DialogTrigger>Invite</DialogTrigger>
+        <DialogTrigger>
+          <UserRoundPlus />
+        </DialogTrigger>
       </Button>
       <DialogContent>
         <DialogHeader>
